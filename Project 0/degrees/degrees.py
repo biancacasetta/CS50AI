@@ -116,8 +116,7 @@ def shortest_path(source, target):
 
                 path.reverse()
                 return path
-            else:
-                if not frontier.contains_state(person_id) and person_id not in explored:
+            elif person_id not in explored:
                     child = Node(person_id, node, movie_id)
                     frontier.add(child)
 

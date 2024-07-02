@@ -49,7 +49,7 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    if action not in actions(board):
+    if board[action[0]][action[1]] is not EMPTY:
         raise Exception("Invalid action: cell is not empty")
 
     new_board = copy.deepcopy(board)
@@ -64,13 +64,13 @@ def winner(board):
     """
     winner = None
 
-    winning_positions = [[(0, 0), (0, 1), (0, 2)],
+    winning_positions = [[(0, 0), (0, 1), (0, 2)], # horizontally
                          [(1, 0), (1, 1), (1, 2)],
                          [(2, 0), (2, 1), (2, 2)],
-                         [(0, 0), (1, 0), (2, 0)],
+                         [(0, 0), (1, 0), (2, 0)], # vertically
                          [(0, 1), (1, 1), (2, 1)],
                          [(0, 2), (1, 2), (2, 2)],
-                         [(0, 0), (1, 1), (2, 2)],
+                         [(0, 0), (1, 1), (2, 2)], # diagonally
                          [(0, 2), (1, 1), (2, 0)]]
     
     for wp in winning_positions:
@@ -116,6 +116,7 @@ def minimax(board):
 
     possible_actions = actions(board)
     current_player = player(board)
+    total_boards = 0
 
     if current_player is X:
         max = max_value(board)
@@ -135,7 +136,7 @@ def max_value(state):
     max_value = -math.inf
     if terminal(state):
         return utility(state)
-    
+
     for action in actions(state):
         max_value = max(max_value, min_value(result(state, action)))
 
