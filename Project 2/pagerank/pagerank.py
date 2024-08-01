@@ -78,14 +78,13 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-
     ranks = {page: 0 for page in corpus}
     random_page = random.choice(list(corpus.keys()))
-
+    
     for i in range(n):
         tm = transition_model(corpus, random_page, damping_factor)
         random_page = np.random.choice(list(tm.keys()), p=list(tm.values()))
-        ranks[random_page] += 0.0001
+        ranks[random_page] += 1 / n
 
     return ranks
 
@@ -115,8 +114,7 @@ def iterate_pagerank(corpus, damping_factor):
                     linked_probability += ranks[i] / len(corpus)
             new_ranks[p] = (1 - damping_factor) / len(corpus) + damping_factor * linked_probability
         
-        for key in ranks:
-            if abs(ranks[key] - new_ranks[key]) > 0.001:
+            if abs(ranks[p] - new_ranks[p]) > 0.001:
                 keep_going = True
         
         ranks = new_ranks
