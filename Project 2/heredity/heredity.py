@@ -152,14 +152,15 @@ def joint_probability(people, one_gene, two_genes, have_trait):
             f_genes = {father in one_gene: 1, father in two_genes: 2}.get(True, 0)
             joint_probability *= calculate_heritage(gene_quantity, m_genes, f_genes)
 
-        has_trait = True if p in have_trait else False
-        joint_probability *= PROBS["trait"][gene_quantity][has_trait]
+        joint_probability *= PROBS["trait"][gene_quantity][p in have_trait]
 
     return joint_probability
+
 
 def calculate_heritage(person_genes, mother_genes, father_genes):
 
     passing_probability = {0: PROBS["mutation"], 1: 0.5, 2: 1 - PROBS["mutation"]}
+    
     match person_genes:
         case 0:
             heritage_probability = ((1 - passing_probability[mother_genes])
@@ -185,9 +186,8 @@ def update(probabilities, one_gene, two_genes, have_trait, p):
     """
     for name in probabilities:
         gene_quantity = {name in one_gene: 1, name in two_genes: 2}.get(True, 0)
-        has_trait = True if name in have_trait else False
         probabilities[name]["gene"][gene_quantity] += p
-        probabilities[name]["trait"][has_trait] += p
+        probabilities[name]["trait"][name in have_trait] += p
 
 
 def normalize(probabilities):
